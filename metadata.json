@@ -1,0 +1,9 @@
+{
+  "name": "AI Counselor Chat",
+  "description": "A chat application that provides counseling advice using Gemini.",
+  "requiredEnvironmentVariables": [
+    "API_KEY"
+  ],
+  "requestFramePermissions": [],
+  "prompt": ""
+}
