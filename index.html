@@ -230,7 +230,7 @@
             
             try {
                 const apiKey = ""; // 自身のAPIキーを設定する場合
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
                 const payload = { contents: [{ role: "user", parts: [{ text: prompt }] }] };
                 const response = await fetch(apiUrl, {
                     method: 'POST',
@@ -242,8 +242,13 @@
 
                 const result = await response.json();
                 let adviceText = "申し訳ありません、うまくアドバイスを生成できませんでした。";
-                if (result.candidates?.[0]?.content?.parts?.[0]?.text) {
+                
+                if (result.candidates && result.candidates.length > 0 && result.candidates[0].content && result.candidates[0].content.parts && result.candidates[0].content.parts.length > 0) {
                     adviceText = result.candidates[0].content.parts[0].text;
+                } else if (result.promptFeedback && result.promptFeedback.blockReason) {
+                    // Handle cases where the prompt was blocked
+                    console.warn(`Prompt blocked due to: ${result.promptFeedback.blockReason}`);
+                    adviceText = "申し訳ありませんが、ご入力いただいた内容にお答えすることはできません。恐れ入りますが、別の表現でお尋ねください。";
                 }
                 
                 processAIResponse(adviceText);
